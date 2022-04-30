@@ -1,0 +1,16 @@
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/community"
+    password: '8848'
+    username: 'root'
+    driver-class-name: 'com.mysql.cj.jdbc.Driver'
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+mybatis:
+  mapper-locations:  classpath:mapper/*.xml
+server:
+  port: 8081
+GiteeToken: '3ec80afd039b170274eb820e0c6efa97'

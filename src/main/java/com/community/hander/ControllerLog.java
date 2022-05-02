@@ -20,6 +20,6 @@ public class ControllerLog {
     @Before("point()")
     public void logData(JoinPoint joinPoint) throws Throwable{
         ServletRequestAttributes requestAttributes =(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        log.info("\nsessionID {} port {} method {}",requestAttributes.getSessionId(),requestAttributes.getRequest().getServerPort(),requestAttributes.getRequest().getMethod());
+        log.info("Name {} port {} method {}",joinPoint.getSignature().getName(),requestAttributes.getRequest().getServerPort(),requestAttributes.getRequest().getMethod());
     }
 }

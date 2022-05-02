@@ -30,7 +30,7 @@ public class FileContorller {
             String fileName= file.getOriginalFilename();
             String avatar=GiteeIamge.upload(fileName,file);
             user.setAvatarUrl(avatar);
-            userService.updataUser(user);
+            userService.updataOrCreateUser(user);
         }else{
             json.failed(ErrorEnum.CHECK_USER_LOGIN);
         }

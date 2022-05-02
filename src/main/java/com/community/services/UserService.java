@@ -25,7 +25,6 @@ public class UserService {
             return users.get(0);
         }
         return null;
-
     }
     public User getUser(String token){
         UserExample userExample=new UserExample();
@@ -33,24 +32,21 @@ public class UserService {
         List<User> users = userMapper.selectByExample(userExample);
         if(users.size()==1)return users.get(0);
         return null;
-
     }
-    public int updataUser(User user) {
+    public int updataOrCreateUser(User user) {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
                 .andAccountIdEqualTo(user.getAccountId())
                 .andPassWordEqualTo(user.getPassWord());
         List<User> users = userMapper.selectByExample(userExample);
         if (users.size() == 0) {
-            return 0;
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            return  userMapper.insert(user);
         } else {
+            user=users.get(0);
+            user.setGmtModified(System.currentTimeMillis());
             return userMapper.updateByPrimaryKey(user);
         }
-    }
-
-
-    public int createUser(User user) {
-       int i=userMapper.insertSelective(user);
-       return i;
     }
 }

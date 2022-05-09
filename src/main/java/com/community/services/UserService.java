@@ -19,7 +19,6 @@ public class UserService {
         userExample.createCriteria()
                 .andPassWordEqualTo(user.getPassWord())
                 .andAccountIdEqualTo(user.getAccountId());
-
         List<User> users = userMapper.selectByExample(userExample);
         if(users.size()==1){
             return users.get(0);
@@ -33,6 +32,9 @@ public class UserService {
         if(users.size()==1)return users.get(0);
         return null;
     }
+    public User getUser(Integer id){
+        return userMapper.selectByPrimaryKey(id);
+    }
     public int updataOrCreateUser(User user) {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
@@ -44,7 +46,7 @@ public class UserService {
             user.setGmtModified(user.getGmtCreate());
             return  userMapper.insert(user);
         } else {
-            user=users.get(0);
+            user.setId(users.get(0).getId());
             user.setGmtModified(System.currentTimeMillis());
             return userMapper.updateByPrimaryKey(user);
         }

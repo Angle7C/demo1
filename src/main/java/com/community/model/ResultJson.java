@@ -1,8 +1,9 @@
-package com.community.hander;
+package com.community.model;
 
 import com.community.enums.ErrorEnum;
 import com.community.enums.SucessEnum;
 import com.community.execption.ControllerExecption;
+import com.community.execption.MyExecption;
 import lombok.*;
 
 import java.util.List;
@@ -34,7 +35,14 @@ public class ResultJson<T> {
     public ResultJson(SucessEnum sucessEnum){
         this(sucessEnum.getSucessCode(),sucessEnum.getMessage(),null,null);
     }
-    public ResultJson(ControllerExecption e){
+    public ResultJson(ErrorEnum errorEnum){
+        this(errorEnum.getCode(),errorEnum.getMessage(),null,null);
+    }
+    public ResultJson(MyExecption e){
         this(e.getCode(),e.getMessage());
+    }
+    public void ok(SucessEnum sucessEnum){
+        this.code=sucessEnum.getSucessCode();
+        this.message=sucessEnum.getMessage();
     }
 }

@@ -56,7 +56,7 @@ public class GiteeOauth implements Oauth {
 
     @Override
     public String getId(String str) {
-        return JsonUtil.getAttribute(str,"avatar_url");
+        return JsonUtil.getAttribute(str,"id");
     }
 
     @Override
@@ -86,7 +86,10 @@ public class GiteeOauth implements Oauth {
 
     @Override
     public User changToUser(String userInfo) {
-        return new User(null,getId(userInfo),getName(userInfo),getToken(),null,null,getLogin(userInfo),getAvatar(userInfo),null,getType());
+        User user=new User(null,getId(userInfo),getName(userInfo),getToken(),null,null,getLogin(userInfo),getAvatar(userInfo),null,getType());
+        System.out.println(user);
+        return user;
+
     }
     public String getTokenUrl(String code, String clientId, String redirect, String clientSecret) {
         return String.format(tokenUrl,code,clientId,redirect,clientSecret);

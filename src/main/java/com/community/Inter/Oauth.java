@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import java.util.Map;
 
 public interface Oauth {
-    String getCode();
     void   setCode(String code);
     void   setToken(String token);
     String getToken(String reponse);

@@ -20,7 +20,6 @@ public class GithubOauth implements Oauth {
     private static final Map<String,Object> map=new HashMap<>();
     static {
         map.put("client_id",clientId);
-//        map.put("redirect_uri",redirectUrl);
         map.put("client_secret",clientSecret);
     }
     @Getter
@@ -57,12 +56,12 @@ public class GithubOauth implements Oauth {
 
     @Override
     public String getId(String str) {
-        return JsonUtil.getAttribute(str,"avatar_url");
+        return JsonUtil.getAttribute(str,"id");
     }
 
     @Override
     public String getType() {
-        return "Gitee";
+        return "Github";
     }
 
     @Override
@@ -90,7 +89,10 @@ public class GithubOauth implements Oauth {
 
     @Override
     public User changToUser(String userInfo) {
-        return null;
+
+        User user= new User(null,getId(userInfo),getName(userInfo),getToken(),null,null,getLogin(userInfo),getAvatar(userInfo),null,getType());
+        System.out.println(user);
+        return user;
     }
 
 }

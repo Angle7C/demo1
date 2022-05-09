@@ -39,4 +39,8 @@ class QuestionServiceTest {
     @Test
     void setQuestionMapper() {
     }
+
+    @Test
+    void selectQuestion() {
+    }
 }

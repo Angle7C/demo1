@@ -1,4 +1,4 @@
-package com.community.model;
+package com.community.enums;
 
 import lombok.Getter;
 

@@ -2,12 +2,11 @@ package com.community.controller;
 
 import com.community.enums.ErrorEnum;
 import com.community.enums.SucessEnum;
-import com.community.hander.ResultJson;
+import com.community.model.ResultJson;
 import com.community.model.User;
 import com.community.services.UserService;
 import com.community.utils.GiteeIamge;
 import com.community.utils.RequestUntils;
-import com.google.gson.JsonParser;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.UUID;
+
 @RestController
 public class FileContorller {
     @Setter

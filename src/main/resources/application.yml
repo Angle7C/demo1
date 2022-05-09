@@ -5,12 +5,19 @@ spring:
     password: '8848'
     username: 'root'
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
+  freemarker:
+    cache: false
   devtools:
     restart:
       enabled: true
-      additional-paths: src/main/java/com/community/*
+      additional-paths: src/main/java
 mybatis:
   mapper-locations:  classpath:mapper/*.xml
 server:
   port: 8081
 GiteeToken: '3ec80afd039b170274eb820e0c6efa97'
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql

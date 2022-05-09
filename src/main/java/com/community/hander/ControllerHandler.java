@@ -3,7 +3,8 @@ package com.community.hander;
 //import org.springframework.web.bind.annotation.RestController;
 import com.community.enums.ErrorEnum;
 import com.community.execption.ControllerExecption;
-import com.community.execption.WorkException;
+import com.community.execption.MyExecption;
+import com.community.model.ResultJson;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerHandler{
     private static final Logger logger= LoggerFactory.getLogger(ControllerHandler.class);
     @ExceptionHandler(value = Exception.class)
-    public ResultJson controllerHanler(WorkException e){
+    public ResultJson controllerHanler(MyExecption e){
         logger.error("【业务异常】: {}",e.getMessage());
         e.printStackTrace();
         return new ResultJson(ErrorEnum.SYSTEM_EXECPTION.getCode(), ErrorEnum.SYSTEM_EXECPTION.getMessage());

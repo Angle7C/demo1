@@ -6,6 +6,8 @@ import com.community.model.UserExample;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -32,21 +34,16 @@ public class UserService {
         if(users.size()==1)return users.get(0);
         return null;
     }
-    public User getUser(Integer id){
+    public User getUser(Long id){
         return userMapper.selectByPrimaryKey(id);
     }
+    @Transactional
     public int updataOrCreateUser(User user) {
-        UserExample userExample = new UserExample();
-        userExample.createCriteria()
-                .andAccountIdEqualTo(user.getAccountId())
-                .andPassWordEqualTo(user.getPassWord());
-        List<User> users = userMapper.selectByExample(userExample);
-        if (users.size() == 0) {
+        if (user.getAccountId() == null) {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             return  userMapper.insert(user);
         } else {
-            user.setId(users.get(0).getId());
             user.setGmtModified(System.currentTimeMillis());
             return userMapper.updateByPrimaryKey(user);
         }

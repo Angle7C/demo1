@@ -19,7 +19,7 @@ public class ServicesLog {
     public void pointLine(){}
     @Pointcut("execution(public Object com.community.services.*.*(..))")
     public void pointObject(){}
-    @AfterReturning(value="pointLine()", returning = "ans" )
+//    @AfterReturning(value="pointLine()", returning = "ans" )
     public void logInt(JoinPoint point, Integer ans){
         Signature signature = point.getSignature();
         if(ans==1){
@@ -31,7 +31,7 @@ public class ServicesLog {
             throw new ServiceExecption(ErrorEnum.SERVICE_EASY_ERROR);
         }
     }
-    @AfterReturning(value="pointObject()", returning = "ans" )
+//    @AfterReturning(value="pointObject()", returning = "ans" )
     public void logObject(JoinPoint point, Object ans){
         Signature signature = point.getSignature();
         if(ans!=null){

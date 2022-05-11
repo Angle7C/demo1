@@ -89,9 +89,7 @@ public class GithubOauth implements Oauth {
 
     @Override
     public User changToUser(String userInfo) {
-
-        User user= new User(null,getId(userInfo),getName(userInfo),getToken(),null,null,getLogin(userInfo),getAvatar(userInfo),null,getType());
-        System.out.println(user);
+        User user=new User(null,getName(userInfo),null,getToken(),null,null,getType(),getAvatar(userInfo));        System.out.println(user);
         return user;
     }
 

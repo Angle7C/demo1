@@ -8,7 +8,7 @@ import com.community.model.User;
 import com.community.oauthuser.GiteeOauth;
 import com.community.oauthuser.GithubOauth;
 import com.community.services.UserService;
-import com.community.utils.RequestUntils;
+import com.community.utils.UserUntils;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,9 @@ public class AuthorizeController {
             System.out.println(1);
             if (token.size() == 0) {
                 login = userService.login(user);
+                cookie.setValue(UUID.randomUUID().toString());
                 json.setMessage("第一次登录");
+
             } else {
                 login = token.get(0);
                 cookie.setValue(login.getToken());
@@ -72,7 +74,8 @@ public class AuthorizeController {
             response.addCookie(cookie);
             System.out.println(login);
             userService.updataOrCreateUser(login);
-            userDTO = login.<UserDTO>getDTO();
+            UserUntils.addUser(login);
+            userDTO = new UserDTO(login);
             json.setData(userDTO);
         }
         return json;
@@ -83,40 +86,39 @@ public class AuthorizeController {
     public ResultJson logOut(
             HttpServletRequest request,
             HttpServletResponse response) {
-//        request.getSession().invalidate();
+        User user = UserUntils.checkUser(request);
+        if(user==null)  return new ResultJson<Object>(ErrorEnum.CHECK_USER_LOGIN);
+        UserUntils.remove(user);
         Cookie cookie = new Cookie("token", "");
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
-        return new ResultJson<Object>(SucessEnum.USER_LOGIN);
+        return new ResultJson<Object>(SucessEnum.USER_LOHOUT);
     }
     //light:OK
     @GetMapping("/checkLogin")
-    public ResultJson<UserDTO> checkLog(
-            HttpServletResponse response,
+    public static ResultJson<UserDTO> checkLog(
             HttpServletRequest request) {
         ResultJson<UserDTO> json = new ResultJson<>(ErrorEnum.CHECK_USER_LOGIN);
-        User token = RequestUntils.getToken(request, userService);
-        UserDTO userDTO=new UserDTO();
+        User token = UserUntils.checkUser(request);
         if(token!=null){
-            BeanUtils.copyProperties(token,userDTO);
-            json.setData(userDTO);
+            json.setData(new UserDTO(token));
             json.ok(SucessEnum.USER_LOGIN);
         }
         return json;
     }
-    //light:await
+    //light:ok
     @PutMapping("logOn")
     public ResultJson<UserDTO> logOn(@RequestBody UserDTO userDTO ,HttpServletResponse response) {
         ResultJson<UserDTO> json=new ResultJson<>(10001,"已存在用户");
-        User user=new User();
-        BeanUtils.copyProperties(userDTO,user);
-        if (user.getId() == null){
+        User user= userDTO.toModel();
+        if (user.getAccountId() == null){
             json.setMessage("注册成功");
             Cookie cookie=new Cookie("token",UUID.randomUUID().toString());
             user.setToken(cookie.getValue());
-            user.setAccountId(UUID.randomUUID().toString());
             user.setType("Self");
+            //TODO:加密
+//            user.setPassWord(MD5Encoder.encode();
             userService.updataOrCreateUser(user);
             BeanUtils.copyProperties(user,userDTO);
             json.setData(userDTO);

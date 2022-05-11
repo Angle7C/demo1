@@ -12,7 +12,8 @@ public enum ErrorEnum {
     CHECK_ERROE_FROM(20002,"校验错误"),
     CHECK_USER_LOGIN(20003,"未登录"),
     SERVICE_EASY_ERROR(30001, "查询数据库异常"),
-    SERVICE_HEAD_ERROR(30002, "查询对象异常");;
+    SERVICE_HEAD_ERROR(30002, "查询对象异常"),
+    SERVICE_NUM_ERROR(30002,"删除数据数量不符合" );;
     private int Code;
     private String message;
 

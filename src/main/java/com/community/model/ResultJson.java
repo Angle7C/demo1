@@ -33,7 +33,7 @@ public class ResultJson<T> {
         this.message=errorEnum.getMessage();
     }
     public ResultJson(SucessEnum sucessEnum){
-        this(sucessEnum.getSucessCode(),sucessEnum.getMessage(),null,null);
+        this(10001,sucessEnum.getMessage(),null,null);
     }
     public ResultJson(ErrorEnum errorEnum){
         this(errorEnum.getCode(),errorEnum.getMessage(),null,null);
@@ -42,7 +42,7 @@ public class ResultJson<T> {
         this(e.getCode(),e.getMessage());
     }
     public void ok(SucessEnum sucessEnum){
-        this.code=sucessEnum.getSucessCode();
+        this.code=1001;
         this.message=sucessEnum.getMessage();
     }
 }

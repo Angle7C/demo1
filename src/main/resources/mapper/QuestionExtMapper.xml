@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.community.mapper.QuestionExtMapper">
     <resultMap id="BaseResultMap" type="com.community.model.Question">
-        <id column="id" jdbcType="INTEGER" property="id" />
+        <id column="id" jdbcType="BIGINT" property="id" />
         <result column="title" jdbcType="VARCHAR" property="title" />
         <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
         <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
@@ -13,12 +13,12 @@
         <result column="tag" jdbcType="BIGINT" property="tag" />
     </resultMap>
     <update id="addView" keyProperty="id" useGeneratedKeys="true">
-        update question into view_count=view_count+1 where id={id}
+        update question set view_count=view_count+1 where id=#{id}
     </update>
     <update id="addComment" keyProperty="id" useGeneratedKeys="true">
-        update question into comment_count=comment_count+1 where id={id}
+        update question set comment_count=comment_count+1 where id=#{id}
     </update>
     <update id="addLike" keyProperty="id" useGeneratedKeys="true">
-        update question into like_count=like_count+1 where id={id}
+        update question set like_count=like_count+1 where id=#{id}
     </update>
 </mapper>

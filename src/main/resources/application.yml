@@ -21,3 +21,7 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
   helper-dialect: mysql
+logging:
+  file:
+    name: "my.log"
+    path: classpath:log/my.log

@@ -1,10 +1,15 @@
 package com.community.services;
 
 import com.community.dto.QuestionDTO;
+import com.community.dto.UserDTO;
+import com.community.enums.ErrorEnum;
+import com.community.execption.ServiceExecption;
 import com.community.hander.TagMap;
+import com.community.mapper.CommentMapper;
 import com.community.mapper.QuestionExtMapper;
 import com.community.mapper.QuestionMapper;
 import com.community.mapper.UserMapper;
+import com.community.model.CommentExample;
 import com.community.model.Question;
 import com.community.model.QuestionExample;
 import com.github.pagehelper.PageHelper;
@@ -12,8 +17,12 @@ import com.github.pagehelper.PageInfo;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Collections;
+import java.util.concurrent.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +35,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionExtMapper questionExtMapper;
+    @Autowired
+    private CommentMapper commentMapper;
     //light:OK
     public PageInfo<QuestionDTO> getPageQuestion(String sort, Long tag, String search, Integer pageSize, Integer pageIndex) {
         PageHelper.startPage(pageIndex, pageSize);
@@ -40,7 +51,9 @@ public class QuestionService {
             criteria.andTagEqualTo(tag);
         List<Question> questions = questionMapper.selectByExample(questionExample);
         List<QuestionDTO> collect = questions.stream().map(item -> {
-            return item.getDTO(userMapper.selectByPrimaryKey(item.getCreator()).getDTO());
+            return new QuestionDTO(item,
+                    new UserDTO(userMapper.selectByPrimaryKey(item.getCreator()))
+                    );
         }).collect(Collectors.toList());
         PageInfo<QuestionDTO> info = new PageInfo<>(collect);
         return info;
@@ -68,18 +81,48 @@ public class QuestionService {
         }
     }
 
-    public Question selectQuestion(Integer id) {
+    public Question selectQuestion(Long id) {
         Assert.notNull(id, "id不能为空");
         Question question = questionMapper.selectByPrimaryKey(id);
         questionExtMapper.addView(id);
         return question;
     }
-
-    public int addView(Integer id) {
-        return questionExtMapper.addView(id);
-    }
     public int addView(Question question){
         return questionExtMapper.addView(question.getId());
-
+    }
+    public int addComment(Question question){
+        return questionExtMapper.addComment(question.getId());
+    }
+    public int addLike(Question question){
+        return questionExtMapper.addLike(question.getId());
+    }
+    public int addView(Long id){
+        return questionExtMapper.addView(id);
+    }
+    public int addComment(Long id){
+        return questionExtMapper.addComment(id);
+    }
+    public int addLike(Long id){
+        return questionExtMapper.addLike(id);
+    }
+    @Transactional
+    public int delQuestionList(List<Long> listId) {
+        QuestionExample example=new QuestionExample();
+        example.createCriteria().andIdIn(listId);
+        List<Question> questions = questionMapper.selectByExample(example);
+        List<Long> commentId=new LinkedList<>();
+        CommentExample commentExample = new CommentExample();
+        List<Long> commentIdList=new LinkedList<>();
+        List<Long> longs = Collections.synchronizedList(commentIdList);
+        questions.parallelStream().forEach(item->{
+            longs.add(item.getId());
+        });
+        commentExample.createCriteria().andIdIn(commentIdList);
+        int i=questionMapper.deleteByExample(example);
+        Assert.isTrue(i==listId.size(),()->{
+            throw new ServiceExecption(ErrorEnum.SERVICE_NUM_ERROR);
+        });
+         commentMapper.deleteByExample(commentExample);
+        return i;
     }
 }

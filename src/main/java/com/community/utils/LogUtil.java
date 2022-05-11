@@ -25,4 +25,24 @@ public class LogUtil {
     public static void trace(String format, Object... param) {
         log.trace(format, param);
     }
+
+    public static void info(Object obj){
+        log.info("{}",obj);
+    }
+    public static void warn(Object obj){
+        log.warn("{}",obj);
+    }
+    public static void error(Object obj){
+        log.error("{}",obj);
+    }
+    public static void info(String obj){
+        log.info(obj);
+    }
+    public static void warn(String obj){
+        log.warn(obj);
+    }
+    public static void error(String obj){
+        log.error(obj);
+    }
+
 }

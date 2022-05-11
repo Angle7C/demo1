@@ -6,7 +6,7 @@ import com.community.model.ResultJson;
 import com.community.model.User;
 import com.community.services.UserService;
 import com.community.utils.GiteeIamge;
-import com.community.utils.RequestUntils;
+import com.community.utils.UserUntils;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,7 @@ public class FileContorller {
     @PostMapping("/uploadImage")
     public ResultJson uploadGitee(MultipartFile file, HttpServletRequest request) throws IOException {
         ResultJson json=new ResultJson(SucessEnum.FILE_UPLOAD);
-        User user= RequestUntils.getToken(request, userService);
+        User user= UserUntils.checkUser(request);
         if(user!=null){
             String fileName= file.getOriginalFilename();
             String avatar=GiteeIamge.upload(fileName,file);
